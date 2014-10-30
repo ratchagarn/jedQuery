@@ -30,3 +30,4 @@ node_modules
 
 vendor/
 example/
+.bak
