@@ -52,10 +52,12 @@ jedQuery.extend(jedQuery.fn, {
 
     jedQuery.fetchElement(this, function(el) {
       if (el) {
-        el.classList.add(class_name);
-      }
-      else {
-        el.className += ' ' + class_name;
+        if (el.classList) {
+          el.classList.add(class_name);
+        }
+        else {
+          el.className += ' ' + class_name;
+        }
       }
     });
 
@@ -294,8 +296,96 @@ jedQuery.extend(jedQuery.fn, {
 
       return this;
     }
-  }
+  },
+
+
+  /**
+   * get parent of current element
+   * ------------------------------------------------------------
+   * @name jedQuery().parent
+   * @return {Object} jedQuery object for chaining
+   */
   
+  parent: function() {
+
+    var parents = [],
+        count = 0;
+
+    jedQuery.fetchElement(this, function(el) {
+      parents.push( el.parentNode );
+    });
+
+    // remove old element
+    jedQuery.cleanElement(this);
+
+    this.length = parents.length;
+    parents.forEach(function(el) {
+
+      if (jedQuery.uniqueElement(this, el)) {
+        this[count] = el;
+        count++;
+      }
+
+    }.bind(this));
+
+    return this;
+
+  },
+
+
+  /**
+   * Fine parent not that closest current this element
+   * ------------------------------------------------------------
+   * @name jedQuery().closest
+   * @param {String} selector
+   * @return {Object} jedQuery object for chaining
+   */
+  
+  closest: function(selector) {
+
+    if (selector == null) {
+      return this;
+    }
+
+
+    var matches_all = [];
+
+    var _closest = function(current_el) {
+      if (current_el.parentNode) {
+        current_el = current_el.parentNode;
+        if (current_el.className.split(' ').indexOf( selector.replace('.', '') ) > -1) {
+          var found_same = false;
+          matches_all.forEach(function(el) {
+            if (el === current_el) {
+              found_same = true;
+            }
+          });
+          if (!found_same) {
+            matches_all.push(current_el);
+          }
+        }
+        else {
+          _closest(current_el);
+        }
+      }
+      else {
+        return current_el;
+      }
+    };
+
+    jedQuery.fetchElement(this, function(el) {
+      _closest(el);
+    });
+
+    console.log(matches_all);
+
+    matches_all.forEach(function(item, i) {
+      this[i] = matches_all[i];
+    }.bind(this));
+    this.length = matches_all.length;
+
+    return this;
+  }
 
 });
 

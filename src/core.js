@@ -22,6 +22,8 @@ var jedQuery = function(selector) {
   return new Core(selector);
 };
 
+jedQuery.version = '0.1.1';
+
 
 /**
  * ------------------------------------------------------------
@@ -30,7 +32,6 @@ var jedQuery = function(selector) {
  */
 
 var Core = function(selector) {
-  this.version = '0.0.1';
   this.constructor = jedQuery;
   this.length = 0;
 
@@ -127,10 +128,27 @@ jedQuery.extend = jedQuery.fn.extend = function(out) {
 
 jedQuery.extend(jedQuery, {
 
+  cleanElement: function(context) {
+    for (var i = 0, len = context.length; i < len; i++) {
+      delete context[i];
+    }
+  },
+
   fetchElement: function(context, callback) {
     for (var i = 0, len = context.length; i < len; i++) {
       callback( context[i] );
     }
+  },
+
+  uniqueElement: function(context, new_element) {
+    var unique = true;
+    for (var i = 0, len = context.length; i < len; i++) {
+      if (context[i] === new_element) {
+        unique = false;
+        break;
+      }
+    }
+    return unique;
   },
 
   map: function(obj, callback) {
