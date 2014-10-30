@@ -1,5 +1,5 @@
 /*!
- * JedQuery version 0.1.1
+ * JedQuery version 0.1.2
  * Inspiration by http://youmightnotneedjquery.com (https://github.com/HubSpot/YouMightNotNeedjQuery)
  * Copyright 2014-Preset
  * Author: Ratchagarn Naewbuntad
@@ -30,14 +30,25 @@ jedQuery.extend(jedQuery.fn, {
   
   find: function(selector) {
     var count = 0,
-        that = this;
+        matches = [];
 
     jedQuery.fetchElement(this, function(el) {
       var find_el = el.querySelectorAll(selector);
       for (var i = 0, len = find_el.length; i < len; i++) {
-        this[i] = find_el[i];
+        matches.push(find_el[i]);
+      }
+    }.bind(this));
+
+    // remove old element
+    jedQuery.cleanElement(this);
+
+    matches.forEach(function(el) {
+
+      if (jedQuery.uniqueElement(this, el)) {
+        this[count] = el;
         count++;
       }
+
     }.bind(this));
 
     // update length
@@ -325,7 +336,6 @@ jedQuery.extend(jedQuery.fn, {
     // remove old element
     jedQuery.cleanElement(this);
 
-    this.length = parents.length;
     parents.forEach(function(el) {
 
       if (jedQuery.uniqueElement(this, el)) {
@@ -334,6 +344,8 @@ jedQuery.extend(jedQuery.fn, {
       }
 
     }.bind(this));
+
+    this.length = count;
 
     return this;
 
@@ -354,42 +366,66 @@ jedQuery.extend(jedQuery.fn, {
       return this;
     }
 
+    var selector_type = selector[0],
+        matches = [],
+        count = 0;
 
-    var matches_all = [];
+    selector = selector.slice(1, selector.length);
 
-    var _closest = function(current_el) {
-      if (current_el.parentNode) {
-        current_el = current_el.parentNode;
-        if (current_el.className.split(' ').indexOf( selector.replace('.', '') ) > -1) {
-          var found_same = false;
-          matches_all.forEach(function(el) {
-            if (el === current_el) {
-              found_same = true;
-            }
-          });
-          if (!found_same) {
-            matches_all.push(current_el);
-          }
+    // class
+    if (selector_type !== '.' && selector_type !== '#') {
+      throw new Error('Wrong selector for closest');
+    }
+
+    var _closest = function(el) {
+
+      if (!el.parentNode) {
+        return el;
+      }
+
+      var current_el = el.parentNode,
+          el_to_stack = null;
+
+      // by class
+      if (selector_type === '.' && current_el.className) {
+        if ( current_el.className.split(' ').indexOf( selector ) > -1 ) {
+          el_to_stack = current_el;
         }
-        else {
-          _closest(current_el);
+      }
+
+      // by ID
+      else if (selector_type === '#' && current_el.id) {
+        if (current_el.id === selector) {
+          el_to_stack = current_el;
         }
+      }
+
+      if (el_to_stack) {
+        matches.push(el_to_stack);
       }
       else {
-        return current_el;
+        _closest(current_el);
       }
+
     };
 
     jedQuery.fetchElement(this, function(el) {
       _closest(el);
     });
 
-    console.log(matches_all);
+    // remove old element
+    jedQuery.cleanElement(this);
 
-    matches_all.forEach(function(item, i) {
-      this[i] = matches_all[i];
+    matches.forEach(function(el) {
+
+      if (jedQuery.uniqueElement(this, el)) {
+        this[count] = el;
+        count++;
+      }
+
     }.bind(this));
-    this.length = matches_all.length;
+
+    this.length = count;
 
     return this;
   }
