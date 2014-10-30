@@ -1,5 +1,6 @@
 jedQuery
 ========
+Lightweight javascript librarywith syntax compatible with jQuery and ready for replace with jQuery anytime.
 
 ### version 0.0.1
 
