@@ -21,7 +21,6 @@ If you know how to use jQuery, then you know how to use jedQuery :)
 ### Avaliable method
 
 #### Elements
-- find
 - addClass
 - removeClass
 - toggleClass
@@ -32,6 +31,7 @@ If you know how to use jQuery, then you know how to use jedQuery :)
 - empty
 - text
 - html
+- find
 - parent
 - closest (support only `id` or `class` selector)
 

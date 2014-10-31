@@ -21,44 +21,6 @@ var root = this,
 jedQuery.extend(jedQuery.fn, {
 
   /**
-   * find element with in context
-   * ------------------------------------------------------------
-   * @name jedQuery().find
-   * @param {String} selector
-   * @return {Object} jedQuery object for chaining
-   */
-  
-  find: function(selector) {
-    var count = 0,
-        matches = [];
-
-    jedQuery.fetchElement(this, function(el) {
-      var find_el = el.querySelectorAll(selector);
-      for (var i = 0, len = find_el.length; i < len; i++) {
-        matches.push(find_el[i]);
-      }
-    }.bind(this));
-
-    // remove old element
-    jedQuery.cleanElement(this);
-
-    matches.forEach(function(el) {
-
-      if (jedQuery.uniqueElement(this, el)) {
-        this[count] = el;
-        count++;
-      }
-
-    }.bind(this));
-
-    // update length
-    this.length = count;
-
-    return this;
-  },
-
-
-  /**
    * Add class to element
    * ------------------------------------------------------------
    * @name jedQuery().addClass
@@ -318,6 +280,31 @@ jedQuery.extend(jedQuery.fn, {
 
 
   /**
+   * find element with in context
+   * ------------------------------------------------------------
+   * @name jedQuery().find
+   * @param {String} selector
+   * @return {Object} jedQuery object for chaining
+   */
+  
+  find: function(selector) {
+    var count = 0,
+        matches = [];
+
+    jedQuery.fetchElement(this, function(el) {
+      var find_el = el.querySelectorAll(selector);
+      for (var i = 0, len = find_el.length; i < len; i++) {
+        matches.push(find_el[i]);
+      }
+    });
+
+    jedQuery.elementStack(this, matches);
+
+    return this;
+  },
+
+
+  /**
    * get parent of current element
    * ------------------------------------------------------------
    * @name jedQuery().parent
@@ -326,26 +313,14 @@ jedQuery.extend(jedQuery.fn, {
   
   parent: function() {
 
-    var parents = [],
+    var matches = [],
         count = 0;
 
     jedQuery.fetchElement(this, function(el) {
-      parents.push( el.parentNode );
+      matches.push( el.parentNode );
     });
 
-    // remove old element
-    jedQuery.cleanElement(this);
-
-    parents.forEach(function(el) {
-
-      if (jedQuery.uniqueElement(this, el)) {
-        this[count] = el;
-        count++;
-      }
-
-    }.bind(this));
-
-    this.length = count;
+    jedQuery.elementStack(this, matches);
 
     return this;
 
@@ -413,19 +388,7 @@ jedQuery.extend(jedQuery.fn, {
       _closest(el);
     });
 
-    // remove old element
-    jedQuery.cleanElement(this);
-
-    matches.forEach(function(el) {
-
-      if (jedQuery.uniqueElement(this, el)) {
-        this[count] = el;
-        count++;
-      }
-
-    }.bind(this));
-
-    this.length = count;
+    jedQuery.elementStack(this, matches);
 
     return this;
   }

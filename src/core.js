@@ -128,6 +128,29 @@ jedQuery.extend = jedQuery.fn.extend = function(out) {
 
 jedQuery.extend(jedQuery, {
 
+  elementStack: function(context, matches) {
+    var count = 0,
+        new_context = {};
+
+    // remove old element
+    for (var i = 0, len = context.length; i < len; i++) {
+      delete context[i];
+    }
+
+    matches.forEach(function(el) {
+
+      if (jedQuery.uniqueElement(context, el)) {
+        context[count] = el;
+        count++;
+      }
+
+    });
+
+    // update length
+    context.length = count;
+    return context;
+  },
+
   cleanElement: function(context) {
     for (var i = 0, len = context.length; i < len; i++) {
       delete context[i];
@@ -136,7 +159,7 @@ jedQuery.extend(jedQuery, {
 
   fetchElement: function(context, callback) {
     for (var i = 0, len = context.length; i < len; i++) {
-      callback( context[i] );
+      callback(context[i]);
     }
   },
 
@@ -218,6 +241,7 @@ root.jedQuery = jedQuery;
 // if found jQuery replace with jQuery instead.
 if (root.jQuery) {
   root.$ = root.jQuery;
+  console.log('Replace with jQuery');
 }
 else {
   root.$ = root.jedQuery;
