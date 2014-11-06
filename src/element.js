@@ -494,6 +494,40 @@ jedQuery.extend(jedQuery.fn, {
 
 
   /**
+   * fetch all element to callback
+   * ------------------------------------------------------------
+   * @name each
+   * @param {Function} callback function for element
+   * @return {Object} jedQuery object for chaining
+   */
+
+  each: function(callback) {
+    jedQuery.fetchElement(this, function(el, i) {
+      callback(i, el);
+    });
+    return this;
+  },
+
+
+  /**
+   * clone current element
+   * ------------------------------------------------------------
+   * @name clone
+   * @return {Object} jedQuery object for chaining
+   */
+
+  clone: function() {
+    var clones = [];
+    jedQuery.fetchElement(this, function(el) {
+      clones.push( el.cloneNode(true) );
+    });
+
+    jedQuery.elementStack(this, clones);
+    return this;
+  },
+
+
+  /**
    * get element position
    * ------------------------------------------------------------
    * @name jedQuery().position

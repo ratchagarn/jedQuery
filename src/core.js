@@ -22,7 +22,7 @@ var jedQuery = function(selector) {
   return new Core(selector);
 };
 
-jedQuery.version = '0.1.3';
+jedQuery.version = '0.1.4';
 
 
 /**
@@ -168,6 +168,24 @@ jedQuery.extend(jedQuery, {
     return unique;
   },
 
+
+  /**
+   * blank function for use as default callback function
+   * ------------------------------------------------------------
+   * @name jedQuery.noop
+   */
+
+  noop: function() {},
+
+
+  /**
+   * loop object or array to callback
+   * ------------------------------------------------------------
+   * @name jedQuery.map
+   * @param {Array|Object} array or object for loop
+   * @param {Function} callback function for array or object
+   */
+
   map: function(obj, callback) {
     if (obj instanceof Array) {
       obj.forEach(function(item, key) {
@@ -179,6 +197,23 @@ jedQuery.extend(jedQuery, {
         var item = obj[key];
         callback(item, key);
       }
+    }
+  },
+
+
+  /**
+   * check contains element
+   * ------------------------------------------------------------
+   * @name jedQuery.contains
+   * @return {Boolean} TRUE/FALSE
+   */
+
+  contains: function(el, child) {
+    if (el !== child && el.contains(child)) {
+      return true;
+    }
+    else {
+      return false;
     }
   }
 
