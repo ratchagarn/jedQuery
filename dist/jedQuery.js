@@ -1,5 +1,5 @@
 /*!
- * JedQuery version 0.1.2
+ * JedQuery version 0.1.3
  * Inspiration by http://youmightnotneedjquery.com (https://github.com/HubSpot/YouMightNotNeedjQuery)
  * Copyright 2014-Preset
  * Author: Ratchagarn Naewbuntad
@@ -29,7 +29,7 @@ var jedQuery = function(selector) {
   return new Core(selector);
 };
 
-jedQuery.version = '0.1.2';
+jedQuery.version = '0.1.3';
 
 
 /**
@@ -158,15 +158,9 @@ jedQuery.extend(jedQuery, {
     return context;
   },
 
-  cleanElement: function(context) {
-    for (var i = 0, len = context.length; i < len; i++) {
-      delete context[i];
-    }
-  },
-
   fetchElement: function(context, callback) {
     for (var i = 0, len = context.length; i < len; i++) {
-      callback(context[i]);
+      callback(context[i], i);
     }
   },
 
@@ -539,8 +533,7 @@ jedQuery.extend(jedQuery.fn, {
    */
   
   find: function(selector) {
-    var count = 0,
-        matches = [];
+    var matches = [];
 
     jedQuery.fetchElement(this, function(el) {
       var find_el = el.querySelectorAll(selector);
@@ -556,6 +549,62 @@ jedQuery.extend(jedQuery.fn, {
 
 
   /**
+   * get previous element of current element
+   * ------------------------------------------------------------
+   * @name jedQuery().prev
+   * @return {Object} jedQuery object for chaining
+   */
+  
+  prev: function() {
+    
+    var el = this[0];
+
+    // prevSibling can include text nodes
+    function previousElementSibling(el) {
+      do {
+        el = el.previousSibling;
+      } while ( el && el.nodeType !== 1 );
+      return el;
+    }
+
+    jedQuery.elementStack(this, [
+      el.previousElementSibling || previousElementSibling( el )
+    ]);
+
+    return this;
+
+  },
+
+
+  /**
+   * get next element of current element
+   * ------------------------------------------------------------
+   * @name jedQuery().prev
+   * @return {Object} jedQuery object for chaining
+   */
+  
+  next: function() {
+
+    var el = this[0];
+
+    // nextSibling can include text nodes
+    function nextElementSibling(el) {
+      do {
+        el = el.nextSibling;
+      } while ( el && el.nodeType !== 1 );
+      return el;
+    }
+
+    jedQuery.elementStack(this, [
+      el.nextElementSibling || nextElementSibling( el )
+    ]);
+
+    return this;
+    
+  },
+
+
+  /**
    * get parent of current element
    * ------------------------------------------------------------
    * @name jedQuery().parent
@@ -564,8 +613,7 @@ jedQuery.extend(jedQuery.fn, {
   
   parent: function() {
 
-    var matches = [],
-        count = 0;
+    var matches = [];
 
     jedQuery.fetchElement(this, function(el) {
       matches.push( el.parentNode );
@@ -575,6 +623,33 @@ jedQuery.extend(jedQuery.fn, {
 
     return this;
 
+  },
+
+
+  /**
+   * get children of current element
+   * ------------------------------------------------------------
+   * @name jedQuery().children
+   * @return {Object} jedQuery object for chaining
+   */
+  
+  children: function() {
+    var children = [];
+
+    jedQuery.fetchElement(this, function(el) {
+
+      for (var i=el.children.length; i--;) {
+        // Skip comment nodes on IE8
+        if (el.children[i].nodeType !== 8) {
+          children.unshift(el.children[i]);
+        }
+      }
+
+    });
+
+    jedQuery.elementStack(this, children);
+
+    return this;
   },
 
 
@@ -642,7 +717,78 @@ jedQuery.extend(jedQuery.fn, {
     jedQuery.elementStack(this, matches);
 
     return this;
+  },
+
+
+  /**
+   * get element siblings
+   * ------------------------------------------------------------
+   * @name jedQuery().siblings
+   * @return {Object} jedQuery object for chaining
+   */
+  
+  siblings: function() {
+    var siblings = [];
+    jedQuery.fetchElement(this, function(el) {
+      siblings = Array.prototype.slice.call(el.parentNode.children);
+      for (var i = siblings.length; i--;) {
+        if (siblings[i] === el) {
+          siblings.splice(i, 1);
+          break;
+        }
+      }
+    });
+
+    jedQuery.elementStack(this, siblings);
+
+    return this;
+  },
+
+
+  /**
+   * get element position
+   * ------------------------------------------------------------
+   * @name jedQuery().position
+   * @return {Object} element position
+   */
+  
+  position: function() {
+    if (this[0]) {
+      var el = this[0];
+      return {
+        left: el.offsetLeft,
+        right: el.offsetRight
+      };
+    }
+    else {
+      return undefined;
+    }
+  },
+  
+
+
+  /**
+   * get element offset
+   * ------------------------------------------------------------
+   * @name jedQuery().offset
+   * @return {Object} element offset
+   */
+  
+  offset: function() {
+    if (this[0]) {
+      var rect = this[0].getBoundingClientRect();
+
+      return {
+        top: rect.top + document.body.scrollTop,
+        left: rect.left + document.body.scrollLeft
+      };
+    }
+    else {
+      return undefined;
+    }
   }
+  
+
 
 });
 
