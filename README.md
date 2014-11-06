@@ -8,6 +8,13 @@ If you know how to use jQuery, then you know how to use jedQuery :)
 
 ### Change log
 
+### 0.1.4
+- Add new utility `noop`
+- Add new utility `contains`
+- Add new method `each`
+- Add new method `clone`
+
+
 #### 0.1.3
 - Add new method `prev`
 - Add new method `next`
@@ -46,6 +53,8 @@ If you know how to use jQuery, then you know how to use jedQuery :)
 - next
 - closest (support only `id` or `class` selector)
 - siblings
+- each
+- clone
 - position
 - offset
 
@@ -56,5 +65,7 @@ If you know how to use jQuery, then you know how to use jedQuery :)
 
 
 ### Utils
+- noop
 - extend
 - map
+- contains

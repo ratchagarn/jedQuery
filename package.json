@@ -1,6 +1,6 @@
 {
   "name": "jedQuery",
-  "version": "0.1.3",
+  "version": "0.1.4",
   "description": "jedQuery",
   "main": "index.js",
   "scripts": {

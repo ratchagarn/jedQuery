@@ -1,5 +1,5 @@
 /*!
- * JedQuery version 0.1.3
+ * JedQuery version 0.1.4
  * Inspiration by http://youmightnotneedjquery.com (https://github.com/HubSpot/YouMightNotNeedjQuery)
  * Copyright 2014-Preset
  * Author: Ratchagarn Naewbuntad
@@ -29,7 +29,7 @@ var jedQuery = function(selector) {
   return new Core(selector);
 };
 
-jedQuery.version = '0.1.3';
+jedQuery.version = '0.1.4';
 
 
 /**
@@ -175,6 +175,24 @@ jedQuery.extend(jedQuery, {
     return unique;
   },
 
+
+  /**
+   * blank function for use as default callback function
+   * ------------------------------------------------------------
+   * @name jedQuery.noop
+   */
+
+  noop: function() {},
+
+
+  /**
+   * loop object or array to callback
+   * ------------------------------------------------------------
+   * @name jedQuery.map
+   * @param {Array|Object} array or object for loop
+   * @param {Function} callback function for array or object
+   */
+
   map: function(obj, callback) {
     if (obj instanceof Array) {
       obj.forEach(function(item, key) {
@@ -186,6 +204,23 @@ jedQuery.extend(jedQuery, {
         var item = obj[key];
         callback(item, key);
       }
+    }
+  },
+
+
+  /**
+   * check contains element
+   * ------------------------------------------------------------
+   * @name jedQuery.contains
+   * @return {Boolean} TRUE/FALSE
+   */
+
+  contains: function(el, child) {
+    if (el !== child && el.contains(child)) {
+      return true;
+    }
+    else {
+      return false;
     }
   }
 
@@ -554,9 +589,9 @@ jedQuery.extend(jedQuery.fn, {
    * @name jedQuery().prev
    * @return {Object} jedQuery object for chaining
    */
-  
+
   prev: function() {
-    
+
     var el = this[0];
 
     // prevSibling can include text nodes
@@ -582,7 +617,7 @@ jedQuery.extend(jedQuery.fn, {
    * @name jedQuery().prev
    * @return {Object} jedQuery object for chaining
    */
-  
+
   next: function() {
 
     var el = this[0];
@@ -600,7 +635,7 @@ jedQuery.extend(jedQuery.fn, {
     ]);
 
     return this;
-    
+
   },
 
 
@@ -632,7 +667,7 @@ jedQuery.extend(jedQuery.fn, {
    * @name jedQuery().children
    * @return {Object} jedQuery object for chaining
    */
-  
+
   children: function() {
     var children = [];
 
@@ -726,7 +761,7 @@ jedQuery.extend(jedQuery.fn, {
    * @name jedQuery().siblings
    * @return {Object} jedQuery object for chaining
    */
-  
+
   siblings: function() {
     var siblings = [];
     jedQuery.fetchElement(this, function(el) {
@@ -746,12 +781,46 @@ jedQuery.extend(jedQuery.fn, {
 
 
   /**
+   * fetch all element to callback
+   * ------------------------------------------------------------
+   * @name each
+   * @param {Function} callback function for element
+   * @return {Object} jedQuery object for chaining
+   */
+
+  each: function(callback) {
+    jedQuery.fetchElement(this, function(el, i) {
+      callback(i, el);
+    });
+    return this;
+  },
+
+
+  /**
+   * clone current element
+   * ------------------------------------------------------------
+   * @name clone
+   * @return {Object} jedQuery object for chaining
+   */
+
+  clone: function() {
+    var clones = [];
+    jedQuery.fetchElement(this, function(el) {
+      clones.push( el.cloneNode(true) );
+    });
+
+    jedQuery.elementStack(this, clones);
+    return this;
+  },
+
+
+  /**
    * get element position
    * ------------------------------------------------------------
    * @name jedQuery().position
    * @return {Object} element position
    */
-  
+
   position: function() {
     if (this[0]) {
       var el = this[0];
@@ -764,7 +833,6 @@ jedQuery.extend(jedQuery.fn, {
       return undefined;
     }
   },
-  
 
 
   /**
@@ -773,7 +841,7 @@ jedQuery.extend(jedQuery.fn, {
    * @name jedQuery().offset
    * @return {Object} element offset
    */
-  
+
   offset: function() {
     if (this[0]) {
       var rect = this[0].getBoundingClientRect();
@@ -787,7 +855,6 @@ jedQuery.extend(jedQuery.fn, {
       return undefined;
     }
   }
-  
 
 
 });
