@@ -22,7 +22,7 @@ var jedQuery = function(selector) {
   return new Core(selector);
 };
 
-jedQuery.version = '0.1.2';
+jedQuery.version = '0.1.3';
 
 
 /**
@@ -151,15 +151,9 @@ jedQuery.extend(jedQuery, {
     return context;
   },
 
-  cleanElement: function(context) {
-    for (var i = 0, len = context.length; i < len; i++) {
-      delete context[i];
-    }
-  },
-
   fetchElement: function(context, callback) {
     for (var i = 0, len = context.length; i < len; i++) {
-      callback(context[i]);
+      callback(context[i], i);
     }
   },
 
