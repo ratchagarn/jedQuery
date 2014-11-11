@@ -20,6 +20,7 @@ If you know how to use jQuery, then you know how to use jedQuery :)
 - Add new method `replaceWith`
 - Add new method `before`
 - Add new method `after`
+- Add new method `css`
 
 
 ### 0.1.4
@@ -77,6 +78,7 @@ If you know how to use jQuery, then you know how to use jedQuery :)
 - clone
 - position
 - offset
+- css (not support get css value)
 
 
 #### Events
