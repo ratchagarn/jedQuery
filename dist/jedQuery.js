@@ -1,5 +1,5 @@
 /*!
- * JedQuery version 0.1.4
+ * JedQuery version 0.1.5
  * Inspiration by http://youmightnotneedjquery.com (https://github.com/HubSpot/YouMightNotNeedjQuery)
  * Copyright 2014-Preset
  * Author: Ratchagarn Naewbuntad
@@ -144,14 +144,21 @@ jedQuery.extend(jedQuery, {
       delete context[i];
     }
 
-    matches.forEach(function(el) {
 
-      if (jedQuery.uniqueElement(context, el)) {
-        context[count] = el;
-        count++;
-      }
+    if (matches instanceof Array) {
+      matches.forEach(function(el) {
 
-    });
+        if (jedQuery.uniqueElement(context, el)) {
+          context[count] = el;
+          count++;
+        }
+
+      });
+    }
+    else if (matches) {
+      context[0] = matches;
+      count = 1;
+    }
 
     // update length
     context.length = count;
@@ -560,6 +567,100 @@ jedQuery.extend(jedQuery.fn, {
 
 
   /**
+   * Add element before inside selector element
+   * ------------------------------------------------------------
+   * @name jedQuery().prepend
+   * @param {String} content for set into element
+   * @return {String} content of element with HTML
+   */
+
+  prepend: function(str) {
+    var el = this[0];
+    if (!el) { return undefined; }
+
+    if (str) {
+      jedQuery.fetchElement(this, function(el) {
+        var new_el = document.createElement('div');
+        new_el.innerHTML = str;
+        el.insertBefore(new_el.childNodes[0], el.firstChild);
+      });
+    }
+    return this;
+  },
+
+
+  /**
+   * Add element after inside selector element
+   * ------------------------------------------------------------
+   * @name jedQuery().append
+   * @param {String} content for set into element
+   * @return {String} content of element with HTML
+   */
+
+  append: function(str) {
+    var el = this[0];
+    if (!el) { return undefined; }
+
+    if (str) {
+      jedQuery.fetchElement(this, function(el) {
+        var new_el = document.createElement('div');
+        new_el.innerHTML = str;
+        el.appendChild(new_el.childNodes[0]);
+      });
+    }
+    return this;
+  },
+
+
+  /**
+   * replace element with other element
+   * ------------------------------------------------------------
+   * @name jedQuery().replaceWith
+   * @param {String} content for set into element
+   * @return {Object} jedQuery object for chaining
+   */
+
+  replaceWith: function(str) {
+    jedQuery.fetchElement(this, function(el) {
+      el.outerHTML = str;
+    });
+    return this;
+  },
+
+
+  /**
+   * add element before selector element
+   * ------------------------------------------------------------
+   * @name jedQuery().before
+   * @param {String} content for set into element
+   * @return {Object} jedQuery object for chaining
+   */
+
+  before: function(str) {
+    jedQuery.fetchElement(this, function(el) {
+      el.insertAdjacentHTML('beforebegin', str);
+    });
+    return this;
+  },
+
+
+  /**
+   * add element after selector element
+   * ------------------------------------------------------------
+   * @name jedQuery().after
+   * @param {String} content for set into element
+   * @return {Object} jedQuery object for chaining
+   */
+
+  after: function(str) {
+    jedQuery.fetchElement(this, function(el) {
+      el.insertAdjacentHTML('afterend', str);
+    });
+    return this;
+  },
+
+
+  /**
    * find element with in context
    * ------------------------------------------------------------
    * @name jedQuery().find
@@ -630,9 +731,10 @@ jedQuery.extend(jedQuery.fn, {
       return el;
     }
 
-    jedQuery.elementStack(this, [
+    jedQuery.elementStack(
+      this,
       el.nextElementSibling || nextElementSibling( el )
-    ]);
+    );
 
     return this;
 
@@ -792,6 +894,20 @@ jedQuery.extend(jedQuery.fn, {
     jedQuery.fetchElement(this, function(el, i) {
       callback(i, el);
     });
+    return this;
+  },
+
+
+  /**
+   * Get index of element selector
+   * ------------------------------------------------------------
+   * @name eq
+   * @param {Number} number of element index
+   * @return {Object} jedQuery object for chaining
+   */
+
+  eq: function(number) {
+    jedQuery.elementStack(this, this[number]);
     return this;
   },
 

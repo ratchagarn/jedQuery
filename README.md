@@ -4,9 +4,23 @@ Lightweight javascript library with syntax compatible with jQuery and ready for 
 If you know how to use jQuery, then you know how to use jedQuery :)
 (This is my project for learning native javascript and how jQuery work)
 
-### Current version 0.1.4
+### Current version 0.1.5
+
+
+### Browser compatible
+- `IE 8+`
+
 
 ### Change log
+
+### 0.1.5
+- Add new method `eq`
+- Add new method `prepend`
+- Add new method `append`
+- Add new method `replaceWith`
+- Add new method `before`
+- Add new method `after`
+
 
 ### 0.1.4
 - Add new utility `noop`
@@ -46,6 +60,11 @@ If you know how to use jQuery, then you know how to use jedQuery :)
 - empty
 - text
 - html
+- prepend
+- append
+- replaceWith
+- before
+- after
 - find
 - parent
 - children
@@ -54,6 +73,7 @@ If you know how to use jQuery, then you know how to use jedQuery :)
 - closest (support only `id` or `class` selector)
 - siblings
 - each
+- eq
 - clone
 - position
 - offset
