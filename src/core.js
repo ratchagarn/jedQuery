@@ -137,14 +137,21 @@ jedQuery.extend(jedQuery, {
       delete context[i];
     }
 
-    matches.forEach(function(el) {
 
-      if (jedQuery.uniqueElement(context, el)) {
-        context[count] = el;
-        count++;
-      }
+    if (matches instanceof Array) {
+      matches.forEach(function(el) {
 
-    });
+        if (jedQuery.uniqueElement(context, el)) {
+          context[count] = el;
+          count++;
+        }
+
+      });
+    }
+    else if (matches) {
+      context[0] = matches;
+      count = 1;
+    }
 
     // update length
     context.length = count;
