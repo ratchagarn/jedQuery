@@ -195,7 +195,6 @@ jedQuery.extend(jedQuery.fn, {
       el.parentNode.removeChild(el);
     });
   },
-  
 
 
   /**
@@ -676,6 +675,37 @@ jedQuery.extend(jedQuery.fn, {
     else {
       return undefined;
     }
+  },
+
+
+  /**
+   * set CSS to selector element
+   * ------------------------------------------------------------
+   * @name jedQuery().css
+   * @param {String} css propertie name
+   * @return {String} css propertie value
+   */
+
+  css: function() {
+    var CSS = {};
+    if (typeof arguments[0] === 'object') {
+      CSS = arguments[0];
+    }
+    else {
+      CSS[ arguments[0] ] = arguments[1];
+    }
+
+    jedQuery.fetchElement(this, function(el) {
+
+      for (var name in CSS) {
+        var value = CSS[name];
+        name = jedQuery.camelCase(name);
+        el.style[name] = value;
+      }
+
+    });
+
+    return this;
   }
 
 
