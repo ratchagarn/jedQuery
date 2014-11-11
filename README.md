@@ -48,6 +48,11 @@ If you know how to use jQuery, then you know how to use jedQuery :)
 - init project
 
 
+### Note
+- Not support multi selector
+- Not support context selector
+
+
 ### Avaliable method
 
 #### Elements
