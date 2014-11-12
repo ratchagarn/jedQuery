@@ -687,25 +687,45 @@ jedQuery.extend(jedQuery.fn, {
    */
 
   css: function() {
-    var CSS = {};
+    var CSS;
+
     if (typeof arguments[0] === 'object') {
       CSS = arguments[0];
     }
-    else {
+    else if (typeof arguments[0] === 'string' && typeof arguments[1] === 'string') {
+      CSS = {};
       CSS[ arguments[0] ] = arguments[1];
     }
 
-    jedQuery.fetchElement(this, function(el) {
+    // set
+    if (CSS) {
 
-      for (var name in CSS) {
-        var value = CSS[name];
-        name = jedQuery.camelCase(name);
-        el.style[name] = value;
+      jedQuery.fetchElement(this, function(el) {
+
+        for (var name in CSS) {
+          var value = CSS[name];
+          name = jedQuery.camelCase(name);
+          el.style[name] = value;
+        }
+
+      });
+
+      return this;
+
+    }
+    // get
+    else {
+
+      if (this[0]) {
+        var prop_value = getComputedStyle(this[0], null).getPropertyValue( arguments[0] );
+        return prop_value ? prop_value : undefined;
+      }
+      else {
+        return undefined;
       }
 
-    });
+    }
 
-    return this;
   }
 
 
