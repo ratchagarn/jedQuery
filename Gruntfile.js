@@ -57,7 +57,8 @@ module.exports = function(grunt) {
           'src/core.js',
           'src/util.js',
           'src/element.js',
-          'src/event.js'
+          'src/event.js',
+          'src/polyfills.js'
         ],
         dest: 'dist/<%= pkg.name %>.js'
       }
