@@ -83,7 +83,7 @@ If you know how to use jQuery, then you know how to use jedQuery :)
 - clone
 - position
 - offset
-- css (not support get css value)
+- css
 
 
 #### Events
