@@ -1,5 +1,5 @@
 /*!
- * JedQuery version 0.1.5
+ * JedQuery version 0.1.6
  * Inspiration by http://youmightnotneedjquery.com (https://github.com/HubSpot/YouMightNotNeedjQuery)
  * Copyright 2014-Preset
  * Author: Ratchagarn Naewbuntad
@@ -671,6 +671,74 @@ jedQuery.extend(jedQuery.fn, {
     jedQuery.elementStack(this, matches);
 
     return this;
+  },
+
+
+  /**
+   * Check the current matched set of elements against a selector
+   * ------------------------------------------------------------
+   * @name jedQuery().is
+   * @param {String} A string containing a selector expression to match elements against.
+   * @param {Object} Element to match the current set of elements against.
+   * @return {Boolean} Is matches or not.
+   */
+
+  is: function(selector) {
+
+    var matches = function(el, selector) {
+
+      if (typeof selector === 'string') {
+
+        var _matches = (
+          el.matches ||
+          el.matchesSelector ||
+          el.msMatchesSelector ||
+          el.mozMatchesSelector ||
+          el.webkitMatchesSelector ||
+          el.oMatchesSelector
+        );
+
+        if (_matches) {
+
+          return _matches.call(el, selector);
+
+        } else {
+
+          var nodes = el.parentNode.querySelectorAll(selector);
+
+          for (var i = nodes.length; i--;) {
+            if (nodes[i] === el) {
+              return true;
+            }
+          }
+          return false;
+
+        }
+
+      }
+      else if (typeof selector === 'object') {
+        if (el === selector) {
+          return true;
+        }
+        else {
+          return false;
+        }
+      }
+      else {
+        return false;
+      }
+
+    };
+
+    var result = false;
+    jedQuery.fetchElement(this, function(el) {
+      if (!result) {
+        result = matches(el, selector);
+      }
+    });
+
+    return result;
+
   },
 
 
