@@ -1,5 +1,7 @@
 jedQuery
 ========
+*** UNDER CONSTRUCTION ***
+
 Lightweight javascript library with syntax compatible with jQuery and ready for replace with jQuery anytime.
 If you know how to use jQuery, then you know how to use jedQuery :)
 (This is my project for learning native javascript and how jQuery work)
