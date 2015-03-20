@@ -31,3 +31,4 @@ node_modules
 vendor/
 example/
 *.bak
+.DS_Store
